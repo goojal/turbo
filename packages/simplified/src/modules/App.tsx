@@ -37,8 +37,11 @@ const AppBody = () => {
   useFinalizeUserTransactions(blocknumber);
 
   useEffect(() => {
-    const parsedQueryString = parseQuery(window.location.search);
+    const parsedQueryString = parseQuery(windowRef.location.search);
     try {
+      if (parsedQueryString && parsedQueryString?.marketId) {
+        windowRef.location.replace(`${windowRef.location.origin}/#!/market?id=${parsedQueryString.marketId}`)
+      }
       if (parsedQueryString && parsedQueryString?.primaryCategory) {
         updateMarketsViewSettings({ primaryCategory: parsedQueryString.primaryCategory });
       }
