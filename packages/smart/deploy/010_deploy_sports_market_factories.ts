@@ -1,8 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { NBAMarketFactory__factory } from "../typechain";
-import { MarketFactoryContractName } from "../addresses";
 import { getCollateral, getFees } from "../src/utils/deploy";
+import { MarketFactoryContractName } from "../constants";
 
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, getNamedAccounts } = hre;

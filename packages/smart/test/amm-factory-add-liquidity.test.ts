@@ -10,8 +10,6 @@ import {
   Cash,
   Cash__factory,
   FeePot__factory,
-  MasterChef,
-  MasterChef__factory,
   TrustedMarketFactory,
   TrustedMarketFactory__factory,
 } from "../typechain";
@@ -24,7 +22,6 @@ describe.skip("AMMFactory", () => {
   let BPool__factory: BPool__factory;
   let Cash__factory: Cash__factory;
   let FeePot__factory: FeePot__factory;
-  let MasterChef__factory: MasterChef__factory;
   let TrustedMarketFactory__factory: TrustedMarketFactory__factory;
 
   let signer: SignerWithAddress;
@@ -50,8 +47,6 @@ describe.skip("AMMFactory", () => {
   let ammFactory: AMMFactory;
   let bFactory: BFactory;
 
-  let masterChef: MasterChef;
-
   let bPool: Contract;
 
   before(async () => {
@@ -60,7 +55,6 @@ describe.skip("AMMFactory", () => {
     BPool__factory = (await ethers.getContractFactory("BPool")) as BPool__factory;
     Cash__factory = (await ethers.getContractFactory("Cash")) as Cash__factory;
     FeePot__factory = (await ethers.getContractFactory("FeePot")) as FeePot__factory;
-    MasterChef__factory = (await ethers.getContractFactory("MasterChef")) as MasterChef__factory;
     TrustedMarketFactory__factory = (await ethers.getContractFactory(
       "TrustedMarketFactory"
     )) as TrustedMarketFactory__factory;
@@ -76,14 +70,7 @@ describe.skip("AMMFactory", () => {
 
     bFactory = await BFactory__factory.deploy();
 
-    rewardsToken = await Cash__factory.deploy("RWS", "RWS", 18);
-
-    masterChef = await MasterChef__factory.deploy(rewardsToken.address);
-    const initialRewards = BONE.mul(10000);
-    await rewardsToken.faucet(initialRewards);
-    await rewardsToken.transfer(masterChef.address, initialRewards);
-
-    ammFactory = await AMMFactory__factory.deploy(bFactory.address, masterChef.address, swapFee);
+    ammFactory = await AMMFactory__factory.deploy(bFactory.address, swapFee);
 
     marketFactory = await TrustedMarketFactory__factory.deploy(
       signer.address,
@@ -93,9 +80,6 @@ describe.skip("AMMFactory", () => {
       [stakerFee, settlementFee, protocolFee],
       signer.address
     );
-
-    // AMMFactory must be owner to call privileged methods.
-    await masterChef.trustAMMFactory(ammFactory.address);
 
     const description = "Who will win Wrestlemania III?";
     const odds = calcWeights([2, 49, 49]);

@@ -8,11 +8,11 @@ import {
   AMMFactory,
   BPool__factory,
   Cash,
-  CryptoMarketFactory,
-  FeePot,
   CryptoFetcher,
   CryptoFetcher__factory,
+  CryptoMarketFactory,
   FakePriceFeed,
+  FeePot,
   OwnedERC20__factory,
 } from "../typechain";
 import {
@@ -20,13 +20,13 @@ import {
   CryptoMarketType,
   fetchDynamicCrypto,
   fetchInitialCrypto,
-  PRICE_FEEDS,
   NULL_ADDRESS,
+  PRICE_FEEDS,
   PRICE_FEEDS_BY_SYMBOL,
   priceFeed,
-  RoundManagement,
   PriceFeed,
   repeat,
+  RoundManagement,
 } from "../src";
 import { calculateSellCompleteSetsWithValues } from "../src/bmath";
 import { makePoolCheck, marketFactoryBundleCheck } from "./fetching";
@@ -314,11 +314,7 @@ describe("CryptoFactory", function () {
     const collateralIn = usdcBasis.mul(10);
     await collateral.faucet(collateralIn);
     await collateral.approve(ammFactory.address, collateralIn);
-    const lpTokensIn = await ammFactory.getTokenBalance(
-      marketFactory.address,
-      ethPriceMarketId.toString(),
-      signer.address
-    );
+    const lpTokensIn = await ammFactory.getPoolTokenBalance(marketFactory.address, ethPriceMarketId, signer.address);
     const pool = await ammFactory
       .getPool(marketFactory.address, ethPriceMarketId)
       .then((address) => BPool__factory.connect(address, signer));
