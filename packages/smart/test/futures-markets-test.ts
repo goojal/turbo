@@ -17,7 +17,6 @@ import {
 } from "../src";
 import { AMMFactory } from "../typechain";
 import { Grouped } from "../typechain";
-import { UnPromisify } from "../dist";
 
 enum GroupStatus {
   Unknown = 0,
@@ -94,7 +93,7 @@ before(async () => {
   await deployments.fixture();
 });
 
-describe.only("Futures Markets", () => {
+describe("Futures Markets", () => {
   let signer: SignerWithAddress;
   before(async () => {
     [signer] = await ethers.getSigners();
